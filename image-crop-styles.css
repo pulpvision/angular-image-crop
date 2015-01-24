@@ -30,7 +30,7 @@
   pointer-events: none;
 }
 /* The circular themed cropping guideline */
-.ng-image-crop--circle .cropping-guide {
+.ng-image-crop-circle .cropping-guide {
   border-radius: 50%;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -66,4 +66,8 @@
   display: block;
   position: relative;
   top: 32px;
+}
+
+#image-crop-input{
+    display: none;
 }
