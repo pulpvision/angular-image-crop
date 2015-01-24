@@ -1,7 +1,8 @@
 NOTE: This is a fork of Andy Shora's great work with some bootstrap CSS tweaks added to suit my purposes.
 
 * Replaced the file input with a bootstrap button, and moved the button controls to the bottom of the module.
-* Added reset function to the scope of the directive. 
+* Added reset function to the scope of the directive.
+* Installation: `bower install angular-image-cropper --save`
 
 Angular Image Crop
 ==================
