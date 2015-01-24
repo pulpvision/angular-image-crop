@@ -760,10 +760,9 @@
             .directive('imageCrop', function () {
 
                 return {
-                    template: '<div id="image-crop-{{ rand }}" class="ng-image-crop ng-image-crop--{{ shape }}" ng-style="moduleStyles">\n\
+                    template: '<div id="image-crop-{{ rand }}" class="ng-image-crop ng-image-crop-{{ shape }}" ng-style="moduleStyles">\n\
                                     <section ng-style="sectionStyles" ng-show="step==1">\n\
                                         <input id="image-crop-input" type="file" class="image-crop-input" />\n\
-                                        <button class="btn btn-primary" ng-click="getFile()">Choose Image</button>\n\
                                     </section>\n\
                                     <section ng-style="sectionStyles" ng-show="step==2">\n\
                                         <canvas class="cropping-canvas" width="{{ canvasWidth }}" height="{{ canvasHeight }}" ng-mousemove="onCanvasMouseMove($event)" ng-mousedown="onCanvasMouseDown($event)" ng-mouseup="onCanvasMouseUp($event)"></canvas>\n\
@@ -771,11 +770,19 @@
                                         <div class="zoom-handle" ng-mousemove="onHandleMouseMove($event)" ng-mousedown="onHandleMouseDown($event)" ng-mouseup="onHandleMouseUp($event)">\n\
                                             <span>&larr; zoom &rarr;</span>\n\
                                         </div>\n\
-                                        <button class="btn btn-primary" ng-click="crop()">Crop</button>\n\
                                     </section>\n\
                                     <section ng-style="sectionStyles" class="image-crop-section-final" ng-show="step==3">\n\
                                         <img class="image-crop-final" ng-src="{{ croppedDataUri }}" />\n\
                                     </section>\n\
+                                    <div ng-show="step==1">\n\
+                                        <button class="btn btn-sm btn-primary" ng-click="getFile()">Choose Image</button>\n\
+                                    </div>\n\
+                                    <div ng-show="step==2">\n\
+                                        <button class="btn btn-sm btn-primary" ng-click="crop()">Crop</button>\n\
+                                    </div>\n\
+                                    <div ng-show="step==3">\n\
+                                        <button class="btn btn-sm btn-primary" ng-click="resetModule()">Reset</button>\n\
+                                    </div>\n\
                                 </div>',
                     replace: true,
                     restrict: 'AE',
@@ -823,7 +830,7 @@
                         // ---------- INLINE STYLES ----------- //
                         scope.moduleStyles = {
                             width: (scope.width + 100) + 'px',
-                            height: (scope.height + 100) + 'px'
+                            height: (scope.height + 150) + 'px'
                         };
 
                         scope.sectionStyles = {
@@ -1042,6 +1049,11 @@
                             setTimeout(function () {
                                 $elm.getElementsByClassName('image-crop-input')[0].click();
                             }, 0);
+                        };
+                        
+                        scope.resetModule = function(){
+                            scope.croppedDataUri = null;
+                            scope.step = 1;
                         };
 
                         scope.crop = function () {
