@@ -8,7 +8,7 @@
   "description": "A better way to crop images client-side using AngularJS",
   "main": [
     "image-crop.js",
-    "image-crop-styles.css"
+    "image-cropper-styles.css"
   ],
   "ignore": [],
   "keywords": [

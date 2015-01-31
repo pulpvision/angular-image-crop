@@ -757,12 +757,12 @@
     })();
 
     angular.module('ImageCropper', [])
-            .directive('imageCrop', function () {
+            .directive('imageCropper', function () {
 
                 return {
-                    template: '<div id="image-crop-{{ rand }}" class="ng-image-crop ng-image-crop-{{ shape }}" ng-style="moduleStyles">\n\
+                    template: '<div id="image-cropper-{{ rand }}" class="ng-image-crop ng-image-cropper-{{ shape }}" ng-style="moduleStyles">\n\
                                     <section ng-style="sectionStyles" ng-show="step==1">\n\
-                                        <input id="image-crop-input" type="file" class="image-crop-input" />\n\
+                                        <input id="image-cropper-input" type="file" class="image-cropper-input" />\n\
                                     </section>\n\
                                     <section ng-style="sectionStyles" ng-show="step==2">\n\
                                         <canvas class="cropping-canvas" width="{{ canvasWidth }}" height="{{ canvasHeight }}" ng-mousemove="onCanvasMouseMove($event)" ng-mousedown="onCanvasMouseDown($event)" ng-mouseup="onCanvasMouseUp($event)"></canvas>\n\
@@ -771,8 +771,8 @@
                                             <span>&larr; zoom &rarr;</span>\n\
                                         </div>\n\
                                     </section>\n\
-                                    <section ng-style="sectionStyles" class="image-crop-section-final" ng-show="step==3">\n\
-                                        <img class="image-crop-final" ng-src="{{ croppedDataUri }}" />\n\
+                                    <section ng-style="sectionStyles" class="image-cropper-section-final" ng-show="step==3">\n\
+                                        <img class="image-cropper-final" ng-src="{{ croppedDataUri }}" />\n\
                                     </section>\n\
                                     <div ng-show="step==1">\n\
                                         <button class="btn btn-sm btn-primary" ng-click="getFile()">Choose Image</button>\n\
@@ -781,7 +781,8 @@
                                         <button class="btn btn-sm btn-primary" ng-click="crop()">Crop</button>\n\
                                     </div>\n\
                                     <div ng-show="step==3">\n\
-                                        <button class="btn btn-sm btn-primary" ng-click="resetModule()">Reset</button>\n\
+                                        <button class="btn btn-sm btn-warning" ng-click="reset()">Reset</button>\n\
+                                        <button class="btn btn-sm btn-primary" ng-click="uploader()">Upload</button>\n\
                                     </div>\n\
                                 </div>',
                     replace: true,
@@ -791,7 +792,9 @@
                         height: '@',
                         shape: '@',
                         result: '=',
-                        step: '='
+                        step: '=',
+                        show: '=',
+                        uploader: '&'
                     },
                     link: function (scope, element, attributes) {
 
@@ -800,16 +803,21 @@
                         scope.shape = scope.shape || 'circle';
                         scope.width = parseInt(scope.width, 10) || 300;
                         scope.height = parseInt(scope.height, 10) || 300;
+                        
+                        // if undefined show by default
+                        if(typeof scope.show === 'undefined'){
+                            scope.show = true;
+                        }
 
                         scope.canvasWidth = scope.width + 100;
                         scope.canvasHeight = scope.height + 100;
 
                         var $elm = element[0];
 
-                        var $input = $elm.getElementsByClassName('image-crop-input')[0];
+                        var $input = $elm.getElementsByClassName('image-cropper-input')[0];
                         var $canvas = $elm.getElementsByClassName('cropping-canvas')[0];
                         var $handle = $elm.getElementsByClassName('zoom-handle')[0];
-                        var $finalImg = $elm.getElementsByClassName('image-crop-final')[0];
+                        var $finalImg = $elm.getElementsByClassName('image-cropper-final')[0];
                         var $img = new Image();
                         var fileReader = new FileReader();
 
@@ -961,10 +969,8 @@
 
                         function updateDragBounds() {
                             // $img.width, $canvas.width, zoom
-
                             minXPos = $canvas.width - ($img.width * zoom) - 50;
                             minYPos = $canvas.height - ($img.height * zoom) - 50;
-
                         }
 
                         function zoomImage(val) {
@@ -1037,7 +1043,7 @@
                             var tempCanvasContext = tempCanvas.getContext('2d');
                             tempCanvasContext.drawImage($finalImg, -50, -50);
 
-                            $elm.getElementsByClassName('image-crop-section-final')[0].appendChild(tempCanvas);
+                            $elm.getElementsByClassName('image-cropper-section-final')[0].appendChild(tempCanvas);
                             scope.result = tempCanvas.toDataURL();
                             scope.$apply();
 
@@ -1047,11 +1053,13 @@
 
                         scope.getFile = function () {
                             setTimeout(function () {
-                                $elm.getElementsByClassName('image-crop-input')[0].click();
+                                $elm.getElementsByClassName('image-cropper-input')[0].click();
                             }, 0);
                         };
                         
-                        scope.resetModule = function(){
+                        // different scope to the other reset
+                        scope.reset = function () {
+                            scope.show = false;
                             scope.croppedDataUri = null;
                             scope.step = 1;
                         };

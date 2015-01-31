@@ -1,8 +1,25 @@
-NOTE: This is a fork of Andy Shora's great work with some bootstrap CSS tweaks added to suit my purposes.
+NOTE: This is a fork of Andy Shora's great work with some tweaks added to suit my purposes.
 
 * Replaced the file input with a bootstrap button, and moved the button controls to the bottom of the module.
 * Added reset function to the scope of the directive.
+* Added the ability to pass in an uploader function.
 * Installation: `bower install angular-image-cropper --save`
+
+### This implementation example markup
+```html
+<div ng-show="showImageCropper">
+    <image-cropper
+        data-width="640"
+        data-height="360"
+        data-shape="square"
+        data-result="imageCropResult"
+        data-step="imageCropStep"
+        data-show="showImageCropper"
+        data-uploader="upload()">
+    </image-cropper>
+</div>
+```
+
 
 Angular Image Crop
 ==================
